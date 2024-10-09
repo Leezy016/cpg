@@ -16,23 +16,14 @@ https://stackoverflow.com/questions/33071296/fatal-error-sfml-graphics-hpp-no-su
 # install sfml
 brew install sfml
 
-# compile src
-g++ src/*.cpp -I/opt/homebrew/Cellar/sfml/2.6.1/include/SFML -std=c++17 -o bin/sfmlgame -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
-
-g++ src/*.cpp -I/opt/homebrew/Cellar/sfml/2.6.1/include -std=c++17 -o bin/sfmlgame -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
-
-
-clang++ -I/opt/homebrew/Cellar/sfml/2.6.1/include -L/opt/homebrew/Cellar/sfml/2.6.1/lib -lsfml-graphics -lsfml-window -lsfml-network -std=c++17 src/main.cpp -o prog
-
-
-clang++ -I/opt/homebrew/Cellar/sfml/2.6.1/include -L/opt/homebrew/Cellar/sfml/2.6.1/lib -lsfml-graphics -lsfml-window -lsfml-network src/main.cpp -o prog
-
-
 # sfml header files location
-/opt/homebrew/Cellar/sfml/2.6.1/include/SFML
-
-
-
 /opt/homebrew/Cellar/sfml/2.6.1
+
+# compile src use make
+# reference: https://github.com/Beatzoid/sfml-macos.git
+make
+
+# run app
+./bin/app
 
 ```
