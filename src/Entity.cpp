@@ -2,13 +2,17 @@
 
 class Entity
 {
-    std::string tag;
-    bool alive = true;
+    const size_t    m_id = 0;
+    std::string     m_tag = "Default";
+    bool            m_alive = true;
 public:
-    
-    Entity(/* args */);
-    ~Entity();
-    std::string tag(){return tag;};
+    std::shared_ptr<CTransform> cTransform;
+    std::shared_ptr<CName> cName;
+    std::shared_ptr<CShape> cShape;
+    std::shared_ptr<CBBox> cBBox;
+    Entity(const std::string& tag, size_t id);
+    std::string tag(){return m_tag;};
+    void destroy() { m_alive = false};
 };
 
 Entity::Entity(/* args */)

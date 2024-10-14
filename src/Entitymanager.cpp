@@ -51,7 +51,9 @@ void Entitymanager::update()
 // delay vector change until the start of next frame, avoid iteriator problem
 std::shared_ptr<Entity> Entitymanager::addEntity(const std::string &tag)
 {
-    auto e = std::make_shared<Entity>(tag, m_totalEntities++);
+    // auto e = std::make_shared<Entity>(tag, m_totalEntities++);
+    // private constructor round way
+    auto e = std::shared_ptr<Entity>(new Entity(tag, m_totalEntities++));
     m_toAdd.push_back(e);
     return e;
 }
