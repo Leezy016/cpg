@@ -27,3 +27,48 @@ make
 ./bin/app
 
 ```
+
+# config
+**Window**
+- width
+- height
+- frameLimit
+- fullScreen(bool)
+
+**Font**
+- fontFile(string)
+- fontSize(int)
+- R(int)
+- G(int)
+- B(int)
+
+**Player**
+- shapeRadius(int)
+- collisionRadius(int)
+- speed(int)
+- fillColor(int,int,int)
+- outlineColor(int,int,int)
+- outlineThickness(int)
+- shapeVertices(int)
+
+**Enemy**
+- shapeRadius(int)
+- collisionRadius(int)
+- speedMin(int)
+- speedMax(int)
+- outlineColor(int,int,int)
+- outlineThickness(int)
+- minVertices(int)
+- maxVertices(int)
+- smallLifespan(int)
+- spawnInterval(int)
+
+**Bullet**
+- shapeRadius(int)
+- collisionRadius(int)
+- speed(int)
+- fillColor(int)
+- outlineColor(int,int,int)
+- outlineThickness(int)
+- shapeVertices(int)
+- lifeSpan(int)

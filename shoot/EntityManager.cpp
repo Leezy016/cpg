@@ -1,6 +1,6 @@
 #include<iostream>
 #include<map>
-#include<Entity.cpp>
+#include "EntityManager.h"
 
 typedef std::vector<std::shared_ptr<Entity>> EntityVec;
 typedef std::map   <std::string, EntityVec>  EntityMap;
@@ -53,7 +53,7 @@ std::shared_ptr<Entity> Entitymanager::addEntity(const std::string &tag)
 {
     // auto e = std::make_shared<Entity>(tag, m_totalEntities++);
     // private constructor round way
-    auto e = std::shared_ptr<Entity>(new Entity(tag, m_totalEntities++));
+    auto e = std::shared_ptr<Entity>(new Entity(m_totalEntities++, tag));
     m_toAdd.push_back(e);
     return e;
 }
