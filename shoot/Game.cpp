@@ -72,7 +72,11 @@ void Game::spawnEnemy()
     //       must be within window
     auto entity = m_entities.addEntity("enemy");
     float ex = rand() % m_window.getSize().x;
-    float ex = rand() % m_window.getSize().y;
+    float ey = rand() % m_window.getSize().y;
+
+    entity->cTransform = std::make_shared<CTransform>(Vec2(ex,ey),Vec2(1.0f, 1.0f), 0.0f);
+    entity->cShape = std::make_shared<CShape>(32.0f, 3, sf::Color(0, 0, 255), sf::Color(255, 255, 255), 4.0f);
+
     // record when the most recent enemy was spawned
     m_lastEnemySpawnTime = m_currentFrame;
 }
@@ -82,21 +86,115 @@ void Game::spawnSmallEnemies(std::shared_ptr<Entity> e)
 
 }
 
+void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2 &mousePos)
+{
+    auto bullet = m_entities.addEntity("bullet");
+    bullet->cTransform = std::make_shared<CTransform>(mousePos, Vec2(0,0), 0);
+    bullet->cShape = std::make_shared<CShape>(10, 8, sf::Color(255,255,255), sf::Color(255,0,0), 2);
+
+}
+
+void Game::sMovement()
+{
+    // implement player movement
+    //
+    //
+    m_player->cTransform->velocity = {0,0};
+    if(m_player->cInput->up)
+    {
+        m_player->cTransform->velocity.y = -5;
+    }
+
+    // TODO
+    // update every entity's position
+    for(auto& e: m_entities.getEntities())
+    {
+        e->cTransform->pos.x += e->cTransform->velocity.x;
+        e->cTransform->pos.y += e->cTransform->velocity.y;
+    }
+
+}
+
 void Game::sRender()
 {
     m_window.clear();
-    m_player->cShape->circle.setPosition(m_player->cTransform->pos.x, m_player->cTransform->pos.y);
-    // player rotation
-    m_player->cTransform->angle += 1.0f;
-    m_player->cShape->circle.setRotation(m_player->cTransform->angle);
 
-    m_window.draw(m_player->cShape->circle);
+    for(auto& e: m_entities.getEntities())
+    {
+        m_player->cShape->circle.setPosition(m_player->cTransform->pos.x, m_player->cTransform->pos.y);
+        // player rotation
+        m_player->cTransform->angle += 1.0f;
+        m_player->cShape->circle.setRotation(m_player->cTransform->angle);
+
+        m_window.draw(m_player->cShape->circle);
+    }
 
     m_window.display();
+}
+
+void Game::sUserInput()
+{
+    // TODO
+    // the movement system will read the variables set in here
+    //
+    //
+    sf::Event event;
+
+    while(m_window.pollEvent(event))
+    {
+        if(event.type == sf::Event::Closed)
+        {
+            m_running = false;
+        }
+
+        if(event.type == sf::Event::KeyPressed)
+        {
+            switch(event.key.code)
+            {
+            case sf::Keyboard::W:
+                m_player->cInput->up = true;
+                break;
+            default:
+                break;
+            }
+        }
+
+        if(event.type == sf::Event::KeyReleased)
+        {
+            switch(event.key.code)
+            {
+            case sf::Keyboard::W:
+                m_player->cInput->up = false;
+                break;
+            default:
+                break;
+            }
+        }
+
+        if(event.type == sf::Event::MouseButtonPressed)
+        {
+            if(event.mouseButton.button == sf::Mouse::Left)
+            {
+                spawnBullet(m_player, Vec2(event.mouseButton.x,event.mouseButton.y));
+            }
+        }
+    }
 }
 
 void Game::sEnemySpawner()
 {
 
     spawnEnemy();
+}
+
+void Game::sCollision()
+{
+    // use collision radius
+    for(auto b : m_entities.getEntities("bullet"))
+    {
+        for(auto e : m_entities.getEntities("enemy"))
+        {
+
+        }
+    }
 }

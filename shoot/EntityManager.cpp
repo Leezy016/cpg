@@ -2,58 +2,53 @@
 #include<map>
 #include "EntityManager.h"
 
-typedef std::vector<std::shared_ptr<Entity>> EntityVec;
-typedef std::map   <std::string, EntityVec>  EntityMap;
-
-class Entitymanager
+EntityVec &EntityManager::getEntities()
 {
-    EntityVec m_entities;
-    EntityVec m_toAdd;
-    EntityMap m_entityMap;
-    size_t    m_totalEntities = 0;
-
-public:
-    Entitymanager();
-    ~Entitymanager();
-    void update();
-    std::shared_ptr<Entity> addEntity(const std::string& tag);
-    EntityVec& getEntities();
-    EntityVec& getEntities(const std::string& tag);
-};
-
-Entitymanager::Entitymanager(/* args */)
-{
+    return m_entities;
 }
 
-Entitymanager::~Entitymanager()
+EntityVec &EntityManager::getEntities(const std::string &tag)
 {
+    return m_entityMap[tag];
 }
 
-// called at beginning of each frame by game engine
-void Entitymanager::update()
+void EntityManager::removeDeadEntities(EntityVec &vec)
 {
-    for(auto e:m_toAdd)
+    for(auto e:vec)
+    {
+        if(!e->isActive())
+        {
+            // remove for vec safely
+            // std::remove_if
+        }
+    }
+}
+
+void EntityManager::update()
+{
+    for(auto e:m_entitiesToAdd)
     {
         m_entities.push_back(e);
         m_entityMap[e->tag()].push_back(e);
     }
-    m_toAdd.clear();
+    m_entitiesToAdd.clear();
 
 
-    // remove dead entities
-    for(auto e:m_entities)
+    // remove dead entities from two places
+    removeDeadEntities(m_entities);
+    for(auto& [tag, entityVec]:m_entityMap)
     {
-        // --remove if-- not alive, safe method
-        // https://stackoverflow.com/questions/67710057/how-exactly-remove-if-works
+        removeDeadEntities(entityVec);
     }
 }
 
 // delay vector change until the start of next frame, avoid iteriator problem
-std::shared_ptr<Entity> Entitymanager::addEntity(const std::string &tag)
+
+std::shared_ptr<Entity> EntityManager::addEntity(const std::string &tag)
 {
     // auto e = std::make_shared<Entity>(tag, m_totalEntities++);
     // private constructor round way
     auto e = std::shared_ptr<Entity>(new Entity(m_totalEntities++, tag));
-    m_toAdd.push_back(e);
+    m_entitiesToAdd.push_back(e);
     return e;
 }

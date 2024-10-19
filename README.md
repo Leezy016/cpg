@@ -26,6 +26,9 @@ make
 # run app
 ./bin/app
 
+# to compile and run in one command
+make run
+
 ```
 
 # config
