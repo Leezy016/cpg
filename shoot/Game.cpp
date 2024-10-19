@@ -11,13 +11,21 @@ Game::Game(const std::string & config)
 void Game::init(const std::string & path)
 {
     std::ifstream fin(path);
+    std::string input;
+    int windowWidth, windowHeight, windowFrameLimit,fontSize,fontR,fontG,fontB,soomeint;
+    bool windowFullScreen;
+    fin
+        >>input>>windowWidth>>windowHeight>>windowFrameLimit>>windowFullScreen
+        >>input>>m_fontConfig.fontPath>>m_fontConfig.fontSize>>m_fontConfig.fontColorR>>m_fontConfig.fontColorG>>m_fontConfig.fontColorB
+        >>input>>m_playerConfig.shapeRadius>>m_playerConfig.collisionRadius>>m_playerConfig.speed>>m_playerConfig.fillColorR>>m_playerConfig.fillColorG>>m_playerConfig.fillColorB>>m_playerConfig.outlineColorR>>m_playerConfig.outlineColorG>>m_playerConfig.outlineColorB>>m_playerConfig.outlineThickness>>m_playerConfig.shapeVertices
+        >>input>>m_enemyConfig.shapeRadius>>m_enemyConfig.collisionRadius>>m_enemyConfig.speedMin>>m_enemyConfig.speedMax>>m_enemyConfig.outlineColorR>>m_enemyConfig.outlineColorG>>m_enemyConfig.outlineColorB>>m_enemyConfig.outlineThickness>>m_enemyConfig.minVertices>>m_enemyConfig.maxVertices>>m_enemyConfig.smallLifespan>>m_enemyConfig.spawnInterval
+        >>input>>m_bulletConfig.shapeRadius>>m_bulletConfig.collisionRadius>>m_bulletConfig.speed>>m_bulletConfig.fillColorR>>m_bulletConfig.fillColorG>>m_bulletConfig.fillColorB>>m_bulletConfig.outlineColorR>>m_bulletConfig.outlineColorG>>m_bulletConfig.outlineColorB>>m_bulletConfig.outlineThickness>>m_bulletConfig.shapeVertices>>m_bulletConfig.lifeSpan;
+    
 
-    // need read from file
-    //
-    //
-    fin>>m_playerConfig.SR>>m_playerConfig.CR;
-    m_window.create(sf::VideoMode(1280, 720), "shoot shape");
-    m_window.setFramerateLimit(60);
+    // window setup
+    m_window.create(sf::VideoMode(windowWidth, windowHeight), "shoot");
+    m_window.setFramerateLimit(windowFrameLimit);
+
 
     spawnPlayer();
 }
@@ -59,7 +67,7 @@ void Game::spawnPlayer()
     float midY = m_window.getSize().y/2;
 
     entity->cTransform = std::make_shared<CTransform>(Vec2(midX, midY), Vec2(1.0f, 1.0f), 0.0f);
-    entity->cShape = std::make_shared<CShape>(32.0f, 8, sf::Color(10, 10, 10), sf::Color(255, 0, 0), 4.0f);
+    entity->cShape = std::make_shared<CShape>(m_playerConfig.shapeRadius, m_playerConfig.shapeVertices, sf::Color(m_playerConfig.fillColorR, m_playerConfig.fillColorG, m_playerConfig.fillColorB), sf::Color(m_playerConfig.outlineColorR, m_playerConfig.outlineColorG, m_playerConfig.outlineColorB), m_playerConfig.outlineThickness);
 
     entity->cInput = std::make_shared<CInput>();
 
@@ -73,10 +81,16 @@ void Game::spawnEnemy()
     auto entity = m_entities.addEntity("enemy");
     float ex = rand() % m_window.getSize().x;
     float ey = rand() % m_window.getSize().y;
+    float enemySides = rand() % m_enemyConfig.maxVertices + m_enemyConfig.minVertices;
+    float enemyColorR = rand() % 255;
+    float enemyColorG = rand() % 255;
+    float enemyColorB = rand() % 255;
 
-    entity->cTransform = std::make_shared<CTransform>(Vec2(ex,ey),Vec2(1.0f, 1.0f), 0.0f);
-    entity->cShape = std::make_shared<CShape>(32.0f, 3, sf::Color(0, 0, 255), sf::Color(255, 255, 255), 4.0f);
-
+    float enemySpeed = rand() % (int)m_enemyConfig.speedMax + m_enemyConfig.speedMin;
+    entity->cTransform = std::make_shared<CTransform>(Vec2(ex,ey),Vec2(enemySpeed, enemySpeed), 0.0);
+    entity->cShape = std::make_shared<CShape>(m_enemyConfig.shapeRadius, enemySides, sf::Color(enemyColorR, enemyColorG, enemyColorB), sf::Color(m_enemyConfig.outlineColorR, m_enemyConfig.outlineColorG, m_enemyConfig.outlineColorB), m_enemyConfig.outlineThickness);
+    
+    
     // record when the most recent enemy was spawned
     m_lastEnemySpawnTime = m_currentFrame;
 }
@@ -89,8 +103,12 @@ void Game::spawnSmallEnemies(std::shared_ptr<Entity> e)
 void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2 &mousePos)
 {
     auto bullet = m_entities.addEntity("bullet");
-    bullet->cTransform = std::make_shared<CTransform>(mousePos, Vec2(0,0), 0);
-    bullet->cShape = std::make_shared<CShape>(10, 8, sf::Color(255,255,255), sf::Color(255,0,0), 2);
+    // calculate bullet velocity use mousePos and playerPos
+    float dist= entity->cTransform->pos.dist(mousePos);
+    float bulletVelX= (mousePos.x-entity->cTransform->pos.x)/dist*m_bulletConfig.speed;
+    float bulletVelY= (mousePos.y-entity->cTransform->pos.y)/dist*m_bulletConfig.speed;
+    bullet->cTransform = std::make_shared<CTransform>(entity->cTransform->pos, Vec2(bulletVelX,bulletVelY), 0);
+    bullet->cShape = std::make_shared<CShape>(m_bulletConfig.shapeRadius, m_bulletConfig.collisionRadius, sf::Color(m_bulletConfig.fillColorR,m_bulletConfig.fillColorG,m_bulletConfig.fillColorB), sf::Color(m_bulletConfig.outlineColorR,m_bulletConfig.outlineColorG,m_bulletConfig.outlineColorB), m_bulletConfig.outlineThickness);
 
 }
 
@@ -104,19 +122,19 @@ void Game::sMovement()
     m_player->cTransform->velocity = {0,0};
     if(m_player->cInput->up)
     {
-        m_player->cTransform->velocity.y = -5;
+        m_player->cTransform->velocity.y = -m_playerConfig.speed;
     }
     if (m_player->cInput->down)
     {
-        m_player->cTransform->velocity.y = 5;
+        m_player->cTransform->velocity.y = m_playerConfig.speed;
     }
     if (m_player->cInput->left)
     {
-        m_player->cTransform->velocity.x = -5;
+        m_player->cTransform->velocity.x = -m_playerConfig.speed;
     }
     if (m_player->cInput->right)
     {
-        m_player->cTransform->velocity.x = 5;
+        m_player->cTransform->velocity.x = m_playerConfig.speed;
     }
 
     // update every entity's position
@@ -131,6 +149,20 @@ void Game::sMovement()
 void Game::sRender()
 {
     m_window.clear();
+
+
+    // font setup
+    sf::Font myfont;
+    if(!myfont.loadFromFile("./"+m_fontConfig.fontPath))
+    {
+        std::cerr << "Could not load font!\n";
+        exit(-1);
+    }
+    sf::Text text("Score: ", myfont, m_fontConfig.fontSize);
+    
+    text.setFillColor(sf::Color(m_fontConfig.fontColorR,m_fontConfig.fontColorG,m_fontConfig.fontColorB));
+    text.setPosition(20, 20);
+    m_window.draw(text);
 
     for(auto& e: m_entities.getEntities())
     {

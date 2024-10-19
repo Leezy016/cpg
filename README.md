@@ -39,7 +39,7 @@ make run
 - fullScreen(bool)
 
 **Font**
-- fontFile(string)
+- fontPath(string)
 - fontSize(int)
 - R(int)
 - G(int)
@@ -48,7 +48,7 @@ make run
 **Player**
 - shapeRadius(int)
 - collisionRadius(int)
-- speed(int)
+- speed(float)
 - fillColor(int,int,int)
 - outlineColor(int,int,int)
 - outlineThickness(int)

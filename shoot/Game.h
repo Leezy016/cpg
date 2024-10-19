@@ -4,9 +4,10 @@
 #include "EntityManager.h"
 #include "Entity.h"
 
-struct PlayerConfig { int SR, CR, FR, FG, FB, OR, OG, OB, OT, V; float S;};
-struct EnemyConfig { int SR, CR, OR, OG, OB, OT, VMIN, VMAX, L, SI; float SMIN;};
-struct BulletConfig { int SR, CR, FR, FB, OR, OG, OB, OT, V, L; float S;};
+struct FontConfig {std::string fontPath; int fontSize, fontColorR, fontColorG, fontColorB;};
+struct PlayerConfig { int shapeRadius, collisionRadius, fillColorR, fillColorG, fillColorB, outlineColorR, outlineColorG, outlineColorB, outlineThickness, shapeVertices; float speed;};
+struct EnemyConfig { int shapeRadius, collisionRadius, outlineColorR, outlineColorG, outlineColorB, outlineThickness, minVertices, maxVertices, smallLifespan, spawnInterval; float speedMin, speedMax;};
+struct BulletConfig { int shapeRadius, collisionRadius, fillColorR, fillColorG, fillColorB, outlineColorR,outlineColorG, outlineColorB, outlineThickness, shapeVertices, lifeSpan; float speed;};
 
 class Game
 {
@@ -14,6 +15,7 @@ class Game
     EntityManager m_entities;
     sf::Font m_font;
     sf::Text m_text;
+    FontConfig m_fontConfig;
     PlayerConfig m_playerConfig;
     EnemyConfig m_enemyConfig;
     BulletConfig m_bulletConfig;
