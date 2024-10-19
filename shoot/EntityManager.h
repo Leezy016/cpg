@@ -12,9 +12,7 @@ class EntityManager
     size_t    m_totalEntities = 0;
 
 public:
-
-    EntityManager();
-    ~EntityManager();
+    EntityManager() { m_totalEntities = 0; };
     EntityVec& getEntities();
     EntityVec& getEntities(const std::string& tag);
     void removeDeadEntities(EntityVec &vec);

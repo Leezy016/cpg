@@ -94,18 +94,31 @@ void Game::spawnBullet(std::shared_ptr<Entity> entity, const Vec2 &mousePos)
 
 }
 
+void Game::spawnSpecialWeapon(std::shared_ptr<Entity> entity)
+{
+}
+
 void Game::sMovement()
 {
-    // implement player movement
-    //
-    //
+    // player movement
     m_player->cTransform->velocity = {0,0};
     if(m_player->cInput->up)
     {
         m_player->cTransform->velocity.y = -5;
     }
+    if (m_player->cInput->down)
+    {
+        m_player->cTransform->velocity.y = 5;
+    }
+    if (m_player->cInput->left)
+    {
+        m_player->cTransform->velocity.x = -5;
+    }
+    if (m_player->cInput->right)
+    {
+        m_player->cTransform->velocity.x = 5;
+    }
 
-    // TODO
     // update every entity's position
     for(auto& e: m_entities.getEntities())
     {
@@ -121,12 +134,12 @@ void Game::sRender()
 
     for(auto& e: m_entities.getEntities())
     {
-        m_player->cShape->circle.setPosition(m_player->cTransform->pos.x, m_player->cTransform->pos.y);
-        // player rotation
-        m_player->cTransform->angle += 1.0f;
-        m_player->cShape->circle.setRotation(m_player->cTransform->angle);
+        e->cShape->circle.setPosition(e->cTransform->pos.x, e->cTransform->pos.y);
+        // rotation
+        e->cTransform->angle += 1.0f;
+        e->cShape->circle.setRotation(e->cTransform->angle);
 
-        m_window.draw(m_player->cShape->circle);
+        m_window.draw(e->cShape->circle);
     }
 
     m_window.display();
@@ -154,6 +167,15 @@ void Game::sUserInput()
             case sf::Keyboard::W:
                 m_player->cInput->up = true;
                 break;
+            case sf::Keyboard::S:
+                m_player->cInput->down = true;
+                break;
+            case sf::Keyboard::A:
+                m_player->cInput->left = true;
+                break;
+            case sf::Keyboard::D:
+                m_player->cInput->right = true;
+                break;
             default:
                 break;
             }
@@ -165,6 +187,15 @@ void Game::sUserInput()
             {
             case sf::Keyboard::W:
                 m_player->cInput->up = false;
+                break;
+            case sf::Keyboard::S:
+                m_player->cInput->down = false;
+                break;
+            case sf::Keyboard::A:
+                m_player->cInput->left = false;
+                break;
+            case sf::Keyboard::D:
+                m_player->cInput->right = false;
                 break;
             default:
                 break;
@@ -179,6 +210,10 @@ void Game::sUserInput()
             }
         }
     }
+}
+
+void Game::sLifeSpan()
+{
 }
 
 void Game::sEnemySpawner()
