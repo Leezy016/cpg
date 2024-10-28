@@ -2,7 +2,7 @@
 SFML_PATH = /opt/homebrew/Cellar/sfml/2.6.1
 
 # Replace "src" with the name of the folder where all your cpp code is
-cppFileNames := $(shell find ./shoot -type f -name "*.cpp")
+cppFileNames := $(shell find ./A3/src -type f -name "*.cpp")
 
 all: compile
 
