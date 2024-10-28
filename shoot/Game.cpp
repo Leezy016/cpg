@@ -76,23 +76,25 @@ void Game::spawnPlayer()
 
 void Game::spawnEnemy()
 {
-    // TODO: use m_enemyConfig
-    //       must be within window
-    auto entity = m_entities.addEntity("enemy");
-    float ex = rand() % m_window.getSize().x;
-    float ey = rand() % m_window.getSize().y;
-    float enemySides = rand() % m_enemyConfig.maxVertices + m_enemyConfig.minVertices;
-    float enemyColorR = rand() % 255;
-    float enemyColorG = rand() % 255;
-    float enemyColorB = rand() % 255;
+    if(m_currentFrame-m_lastEnemySpawnTime==m_enemyConfig.spawnInterval)
+    {
+        auto entity = m_entities.addEntity("enemy");
+        float ex = rand() % m_window.getSize().x;
+        float ey = rand() % m_window.getSize().y;
+        float enemySides = rand() % m_enemyConfig.maxVertices + m_enemyConfig.minVertices;
+        float enemyColorR = rand() % 255;
+        float enemyColorG = rand() % 255;
+        float enemyColorB = rand() % 255;
 
-    float enemySpeed = rand() % (int)m_enemyConfig.speedMax + m_enemyConfig.speedMin;
-    entity->cTransform = std::make_shared<CTransform>(Vec2(ex,ey),Vec2(enemySpeed, enemySpeed), 0.0);
-    entity->cShape = std::make_shared<CShape>(m_enemyConfig.shapeRadius, enemySides, sf::Color(enemyColorR, enemyColorG, enemyColorB), sf::Color(m_enemyConfig.outlineColorR, m_enemyConfig.outlineColorG, m_enemyConfig.outlineColorB), m_enemyConfig.outlineThickness);
+        float enemySpeed = rand() % (int)m_enemyConfig.speedMax + m_enemyConfig.speedMin;
+        entity->cTransform = std::make_shared<CTransform>(Vec2(ex,ey),Vec2(enemySpeed, enemySpeed), 0.0);
+        entity->cShape = std::make_shared<CShape>(m_enemyConfig.shapeRadius, enemySides, sf::Color(enemyColorR, enemyColorG, enemyColorB), sf::Color(m_enemyConfig.outlineColorR, m_enemyConfig.outlineColorG, m_enemyConfig.outlineColorB), m_enemyConfig.outlineThickness);
+        
+        
+        // record when the most recent enemy was spawned
+        m_lastEnemySpawnTime = m_currentFrame;
+    }
     
-    
-    // record when the most recent enemy was spawned
-    m_lastEnemySpawnTime = m_currentFrame;
 }
 
 void Game::spawnSmallEnemies(std::shared_ptr<Entity> e)
@@ -136,6 +138,10 @@ void Game::sMovement()
     {
         m_player->cTransform->velocity.x = m_playerConfig.speed;
     }
+
+    // enemy movement
+    
+
 
     // update every entity's position
     for(auto& e: m_entities.getEntities())

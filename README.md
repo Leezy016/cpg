@@ -75,3 +75,7 @@ make run
 - outlineThickness(int)
 - shapeVertices(int)
 - lifeSpan(int)
+
+
+# animation
+load texture before animation
