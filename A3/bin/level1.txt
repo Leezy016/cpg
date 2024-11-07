@@ -1,3 +1,0 @@
-Tile Block 83 1
-Decoration CloudSmall 2 7
-Player 2 6 16 16 5 -20 20 0.75 Buster

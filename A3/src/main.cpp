@@ -1,8 +1,10 @@
-#include "GameEngine.hpp"
+#include <SFML/Graphics.hpp>
+#include "GameEngine.h"
 
-int main()
-{
-	GameEngine g("bin/config.txt");
-	g.run();
-	return 0;
+
+int main() {
+    GameEngine g("A3/assets/assets.txt");
+    g.run();
+
+    return 0;
 }

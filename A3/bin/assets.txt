@@ -1,8 +1,0 @@
-Texture TexMarioIdle assets/images/characters-sprite.png 0 0 16 16 0
-Texture TexMarioRun assets/images/characters-sprite.png 16 0 48 16 0
-Texture TexMarioJump assets/images/characters-sprite.png 64 0 16 16 0
-Animation MarioIdle TexMarioIdle 1 1
-Animation MarioRun  TexMarioRun 3 10
-Animation MarioJump TexMarioJump 1 1
-Font Joystix assets/fonts/joystix_monospace.otf
-Font Arial assets/fonts/Arial.ttf

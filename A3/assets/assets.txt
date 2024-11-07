@@ -1,0 +1,38 @@
+Texture     TexStand       A3/assets/images/megaman/stand_128x64.png
+Texture     TexStandShoot  A3/assets/images/megaman/stand_shoot.png
+Texture     TexRun         A3/assets/images/megaman/run_192x64.png
+Texture     TexRunShoot    A3/assets/images/megaman/run_shoot.png
+Texture     TexJump        A3/assets/images/megaman/jump.png
+Texture     TexAirShoot    A3/assets/images/megaman/air_shoot.png
+Texture     TexBuster      A3/assets/images/megaman/buster16.png
+Texture     TexExplode     A3/assets/images/misc/explosion64.png
+Texture     TexGround      A3/assets/images/mario/ground.png
+Texture     TexBrick       A3/assets/images/mario/brick.png
+Texture     TexBrickDebris A3/assets/images/mario/brick_debris.png
+Texture     TexQuestion    A3/assets/images/mario/question.png
+Texture     TexQuestionHit A3/assets/images/mario/question_hit.png
+Texture     TexCoinSpin    A3/assets/images/mario/coin.png
+Texture     TexTree        A3/assets/images/mario/tree.png
+Texture     TexCastleSmall A3/assets/images/mario/castle_small.png
+Texture     TexFlower      A3/assets/images/mario/flower.png
+Texture     TexBush        A3/assets/images/mario/bush.png
+Animation   Stand          TexStand       2  30
+Animation   StandShoot     TexStandShoot  1   1
+Animation   Run            TexRun         3   7
+Animation   RunShoot       TexRunShoot    3   7
+Animation   Jump           TexJump        1   1
+Animation   AirShoot       TexAirShoot    1   1
+Animation   Buster         TexBuster      1   1
+Animation   Explosion      TexExplode    12   2
+Animation   Ground         TexGround      1   1
+Animation   Brick          TexBrick       1   1
+Animation   BrickDebris    TexBrickDebris 1   1
+Animation   Question       TexQuestion    2  10
+Animation   QuestionHit    TexQuestionHit 1   1
+Animation   CoinSpin       TexCoinSpin    4  10
+Animation   Tree           TexTree        1   1
+Animation   CastleSmall    TexCastleSmall 1   1
+Animation   Flower         TexFlower      1   1
+Animation   Bush           TexBush        1   1
+Font        Tech           A3/assets/fonts/tech.ttf
+Font        Mario          A3/assets/fonts/mario.ttf
